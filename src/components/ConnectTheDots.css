@@ -1,0 +1,174 @@
+.connect-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.canvas-wrapper {
+    position: relative;
+    width: 1200px;
+    height: 600px;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.music-control {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.music-btn {
+    background: white;
+    border: 2px solid #5d4037;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+}
+
+.dots-svg {
+    /* No white background, let paper show through */
+    background: transparent;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d81b60" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>') 0 24, auto;
+    /* Pencil-ish cursor */
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dot {
+    transition: r 0.3s ease, fill 0.3s ease;
+}
+
+.active-dot {
+    animation: pulse 1.5s infinite;
+    r: 8;
+    cursor: pointer;
+}
+
+.guiding-line {
+    opacity: 0.6;
+}
+
+@keyframes pulse {
+    0% {
+        r: 6;
+        fill: #ff80ab;
+        box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.7);
+    }
+
+    70% {
+        r: 10;
+        fill: #ff4081;
+        box-shadow: 0 0 0 10px rgba(255, 64, 129, 0);
+    }
+
+    100% {
+        r: 6;
+        fill: #ff80ab;
+        box-shadow: 0 0 0 0 rgba(255, 64, 129, 0);
+    }
+}
+
+.final-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.final-message h1 {
+    font-family: 'Great Vibes', cursive;
+    color: #d81b60;
+    font-size: 4rem;
+    margin: 0 0 10px;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.pixel-text {
+    font-family: 'Press Start 2P', cursive;
+    color: #e91e63;
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 0px #ffc107;
+}
+
+.proposal-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.pixel-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    padding: 15px 25px;
+    border: 4px solid #000;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+    transition: transform 0.1s;
+    text-transform: uppercase;
+}
+
+.pixel-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+}
+
+.yes-btn {
+    background-color: #ff4081;
+    color: white;
+    border-color: #c60055;
+}
+
+.yes-btn:hover {
+    background-color: #f50057;
+}
+
+.no-btn {
+    background-color: #bdbdbd;
+    color: #757575;
+    border-color: #757575;
+    cursor: not-allowed;
+}
+
+.final-answer {
+    font-family: 'Press Start 2P', cursive;
+    color: #d81b60;
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-top: 20px;
+}

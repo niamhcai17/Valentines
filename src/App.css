@@ -1,0 +1,32 @@
+/* Custom styles for the Connect the Dots app */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f9f9f9;
+  /* Subtle off-white for page */
+  color: #5d4037;
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
+  /* Prevent scrollbars */
+}
+
+.canvas-container {
+  position: relative;
+  width: 1200px;
+  height: 600px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Add google font import to index.html or here */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap');
