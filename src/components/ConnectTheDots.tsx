@@ -58,10 +58,31 @@ const ConnectTheDots: React.FC = () => {
         // Attempt autoplay on mount
         if (audioRef.current) {
             audioRef.current.volume = 0.5;
-            audioRef.current.play()
-                .then(() => setIsPlaying(true))
-                .catch(e => console.log("Autoplay prevented:", e));
+            const playPromise = audioRef.current.play();
+
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        setIsPlaying(true);
+                    })
+                    .catch(e => {
+                        console.log("Autoplay prevented by browser:", e);
+                        setIsPlaying(false);
+                    });
+            }
         }
+
+        // Add distinct click listener to document to catch any first interaction
+        const enableAudio = () => {
+            if (audioRef.current && audioRef.current.paused) {
+                audioRef.current.play()
+                    .then(() => setIsPlaying(true))
+                    .catch(e => console.log("Still prevented:", e));
+            }
+        };
+
+        document.addEventListener('click', enableAudio);
+        return () => document.removeEventListener('click', enableAudio);
     }, []);
 
     const toggleMusic = () => {
@@ -182,7 +203,7 @@ const ConnectTheDots: React.FC = () => {
     return (
         <div className="connect-game">
             {/* Audio Element */}
-            <audio ref={audioRef} src="/lauv_all_4_nothing.mp3" loop />
+            <audio ref={audioRef} src="/lauv_all_4_nothing.mp3" loop autoPlay />
 
             <div className="music-control">
                 <button className="music-btn" onClick={toggleMusic} title="Play/Pause Music">
