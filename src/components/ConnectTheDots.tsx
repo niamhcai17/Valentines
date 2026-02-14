@@ -50,39 +50,27 @@ const ConnectTheDots: React.FC = () => {
     const [completed, setCompleted] = useState(false);
     const [accepted, setAccepted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [hasStarted, setHasStarted] = useState(false);
 
     const svgRef = useRef<SVGSVGElement>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    useEffect(() => {
-        // Attempt autoplay on mount
+    const handleStart = () => {
         if (audioRef.current) {
             audioRef.current.volume = 0.5;
-            const playPromise = audioRef.current.play();
-
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        setIsPlaying(true);
-                    })
-                    .catch(e => {
-                        console.log("Autoplay prevented by browser:", e);
-                        setIsPlaying(false);
-                    });
-            }
+            audioRef.current.play()
+                .then(() => {
+                    setIsPlaying(true);
+                })
+                .catch(e => console.log("Play failed", e));
         }
+        setHasStarted(true);
+    };
 
-        // Add distinct click listener to document to catch any first interaction
-        const enableAudio = () => {
-            if (audioRef.current && audioRef.current.paused) {
-                audioRef.current.play()
-                    .then(() => setIsPlaying(true))
-                    .catch(e => console.log("Still prevented:", e));
-            }
-        };
-
-        document.addEventListener('click', enableAudio);
-        return () => document.removeEventListener('click', enableAudio);
+    useEffect(() => {
+        // No autoplay on mount, handled by handleStart
+        // Remove distinct click listener as well, handleStart is the single entry point
+        // for audio playback now.
     }, []);
 
     const toggleMusic = () => {
@@ -111,13 +99,6 @@ const ConnectTheDots: React.FC = () => {
     };
 
     const handleMouseDown = (e: React.MouseEvent) => {
-        // Try to play audio on first interaction if not playing
-        if (audioRef.current && !isPlaying) {
-            audioRef.current.play()
-                .then(() => setIsPlaying(true))
-                .catch(e => console.log("Audio play failed:", e));
-        }
-
         if (completed) return;
 
         const pos = getMousePos(e);
@@ -138,6 +119,9 @@ const ConnectTheDots: React.FC = () => {
     const handleMouseMove = (e: React.MouseEvent) => {
         if (completed || !isDrawing) return;
 
+        // Prevent default touch actions to stop scrolling on mobile
+        e.preventDefault();
+
         const pos = getMousePos(e);
 
         // Add point to current path
@@ -156,15 +140,14 @@ const ConnectTheDots: React.FC = () => {
 
     const handleMouseUp = () => {
         setIsDrawing(false);
-        // If not connected, we keep the scribble or clear it? Keeping it for "sketch" feel if desired, 
-        // but clearing it feels cleaner if connection failed.
-        // Let's clear uncommited paths to avoid mess.
         setCurrentPathPoints([]);
     };
 
     const handleDotReached = (pos: { x: number, y: number }) => {
-        // Commit trace
-        const newPath = pointsToPath([...currentPathPoints, { x: points[nextDotIndex].x, y: points[nextDotIndex].y }]);
+        // Play success sound or visual feedback here if desired
+
+        // Add current path to completed paths
+        const newPath = pointsToPath(currentPathPoints);
         setCompletedPaths(prev => [...prev, newPath]);
 
         // Start new segment from current pos
@@ -199,6 +182,16 @@ const ConnectTheDots: React.FC = () => {
             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
         }, 250);
     };
+
+    if (!hasStarted) {
+        return (
+            <div className="start-screen" onClick={handleStart}>
+                <div className="start-heart">❤️</div>
+                <div className="start-text">Tap to Open<br />My Love</div>
+            </div>
+        );
+    }
+
 
     return (
         <div className="connect-game">
@@ -308,7 +301,7 @@ const ConnectTheDots: React.FC = () => {
                                         className="pixel-btn no-btn"
                                         disabled
                                         style={{ position: 'relative' }}
-                                        onMouseEnter={(e) => {
+                                        onMouseEnter={() => {
                                             // Optional: fun little run away or just static disabled
                                             // For now just disabled per strict instruction "solo se pueda presionar yes"
                                         }}
