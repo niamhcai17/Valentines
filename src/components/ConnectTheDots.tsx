@@ -88,7 +88,7 @@ const ConnectTheDots: React.FC = () => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [accepted, setAccepted] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [, setIsPlaying] = useState(false);
     const [hasStarted, setHasStarted] = useState(false);
     const nextDotRef = useRef(0);
     const [isPortrait, setIsPortrait] = useState(false);
@@ -262,10 +262,6 @@ const ConnectTheDots: React.FC = () => {
         }
     };
 
-    const pointsToPath = (pts: Point[]) => {
-        if (pts.length < 2) return "";
-        return `M ${pts.map(p => `${p.x},${p.y}`).join(' L ')}`;
-    };
 
     const triggerCelebration = () => {
         const duration = 5 * 1000;
